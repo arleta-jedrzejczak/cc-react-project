@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 import axios from 'axios'
 import {
    makeStyles,
@@ -103,6 +104,12 @@ const useStyles=makeStyles({
       width: '30px',
       height: '30px'
    },
+   tabHeader:{
+      fontSize: '20px',
+      fontWeight: 700,
+      color: '#111220',
+      margin: '10px'
+   },
    avatar:{
       width: '80px',
       height: '80px',
@@ -117,11 +124,23 @@ const useStyles=makeStyles({
    },
    postImg:{
       objectFit: 'cover',
-      height: '100%',
-      width: 'auto'
+      width: '100%',
+      height: '100%'
+   },
+   editDialog:{
+      padding: '10px 30px 20px',
+      display: 'flex',
+      flexDirection: 'column'
    },
    closeEditBtn:{
-
+      margin: '10px 10px 0'
+   },
+   editInput:{
+      margin: '10px 0'
+   },
+   editBtnContainer:{
+      display: 'flex',
+      justifyContent: 'space-between'
    }
 })
 
@@ -136,9 +155,14 @@ const TabPanel = props => {
 
 export const User=()=>{
    const classes=useStyles()
+   const history=useHistory()
    const [menuAnchor, setMenuAnchor]=useState(null)
    const [tabValue, setTabValue]=useState(0)
    const [openEdit, setOpenEdit]=useState(false)
+   const [username, setUsername]=useState('User name')
+   const [email, setEmail]=useState('User name')
+   const [password, setPassword]=useState('User name')
+   const [passwordRepeat, setPasswordRepeat]=useState('User name')
    // const [posts, setPosts]=useState([])
 
    // useEffect(() => {
@@ -157,18 +181,28 @@ export const User=()=>{
       setMenuAnchor(null);
    };
 
-   const handleTabChange = (e, value) => setTabValue(value);
-
-   const handleClick=e=>{
-      console.log(e.target.id);
-      
-      // setOpenEdit(null)
-   }
+   const handleTabChange=(e, value)=>setTabValue(value)
 
    const handleEditUser=e=>{
       setOpenEdit(e.currentTarget)
-
       handleMenuClose()
+   }
+
+   const handleUsernameChange=e=>{
+      setUsername(e.currentTarget.value)
+      console.log(username);
+   }
+   const handleEmailChange=e=>{
+      setEmail(e.currentTarget.value)
+      console.log(email);
+   }
+   const handlePasswordChange=e=>{
+      setPassword(e.currentTarget.value)
+      console.log(password);
+   }
+   const handlePasswordRepeatChange=e=>{
+      setPasswordRepeat(e.currentTarget.value)
+      console.log(passwordRepeat);
    }
    
 
@@ -176,13 +210,10 @@ export const User=()=>{
       <>
          {posts ? 
          <>
-            <div 
-               className={classes.userNav} 
-               onClick={handleClick}
-               >
+            <div className={classes.userNav}>
                <Typography 
                   variant='h5' 
-                  className={classes.userName}>User name</Typography>
+                  className={classes.userName}>{username}</Typography>
 
                <div>
                   <IconButton className={classes.navBtn}>
@@ -202,14 +233,44 @@ export const User=()=>{
                      onClose={handleMenuClose}
                   >
                      <MenuItem onClick={handleEditUser}>Edit Account</MenuItem>
-                     <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+                     <MenuItem onClick={()=>history.push('/')}>Logout</MenuItem>
 
                      <Dialog
                         id='userEdit'
                         open={openEdit}
                         onClose={()=>setOpenEdit(false)}>
-                           <TextField label='username' color='secondary'/>
-                           <Button onClick={()=>setOpenEdit(null)}>Close</Button>
+                           <div className={classes.editDialog}>
+                              <TextField 
+                                 label='username' 
+                                 color='secondary'
+                                 className={classes.editInput}
+                                 onChange={handleUsernameChange}/>
+                              <TextField 
+                                 label='email' 
+                                 color='secondary'
+                                 className={classes.editInput}
+                                 onChange={handleEmailChange}/>
+                              <TextField 
+                                 label='password' 
+                                 color='secondary'
+                                 className={classes.editInput}
+                                 onChange={handlePasswordChange}/>
+                              <TextField 
+                                 label='repeat password' 
+                                 color='secondary'
+                                 className={classes.editInput}
+                                 onChange={handlePasswordRepeatChange}/>
+                                 <div className={classes.editBtnContainer}>
+                                    <Button 
+                                       color='secondary'
+                                       className={classes.closeEditBtn}
+                                       onClick={()=>setOpenEdit(null)}>Save</Button>
+                                    <Button 
+                                       color='secondary'
+                                       className={classes.closeEditBtn}
+                                       onClick={()=>setOpenEdit(null)}>Close</Button>
+                                 </div>
+                           </div>
                      </Dialog>
                   </Menu>
                </div>
@@ -220,8 +281,8 @@ export const User=()=>{
             </div>
 
             <Tabs onChange={handleTabChange}>
-               <Tab label='Posts'/>
-               <Tab label='Favourites'/>
+               <Tab label='Posts' className={classes.tabHeader}/>
+               <Tab label='Favourites' className={classes.tabHeader}/>
             </Tabs>
 
             <TabPanel index={0} value={tabValue}>
