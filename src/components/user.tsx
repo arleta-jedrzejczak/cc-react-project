@@ -19,38 +19,38 @@ import {
 import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
 
-const posts=[
-   {
-      image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-      tags: ['forest', 'chillout', 'green'],
-      coments: ['boring comment', 'and another one, slighty longer than the previous'],
-      likes: 10
-   },
-   {
-      image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-      tags: ['forest'],
-      coments: ['and another one, slighty longer than the previous'],
-      likes: 12
-   },
-   {
-      image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-      tags: ['forest', 'chillout', 'green'],
-      coments: [],
-      likes: 10
-   },
-   {
-      image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-      tags: ['forest'],
-      coments: ['and another one, slighty longer than the previous'],
-      likes: 12
-   },
-   {
-      image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-      tags: [],
-      coments: ['boring comment', 'and another one, slighty longer than the previous'],
-      likes: 0
-   },
-]
+// const posts=[
+//    {
+//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
+//       tags: ['forest', 'chillout', 'green'],
+//       coments: ['boring comment', 'and another one, slighty longer than the previous'],
+//       likes: 10
+//    },
+//    {
+//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
+//       tags: ['forest'],
+//       coments: ['and another one, slighty longer than the previous'],
+//       likes: 12
+//    },
+//    {
+//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
+//       tags: ['forest', 'chillout', 'green'],
+//       coments: [],
+//       likes: 10
+//    },
+//    {
+//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
+//       tags: ['forest'],
+//       coments: ['and another one, slighty longer than the previous'],
+//       likes: 12
+//    },
+//    {
+//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
+//       tags: [],
+//       coments: ['boring comment', 'and another one, slighty longer than the previous'],
+//       likes: 0
+//    },
+// ]
 
 const favourites=[
    {
@@ -153,33 +153,61 @@ const TabPanel = props => {
    )
 }
 
-export const User=()=>{
+interface UserInterface {
+   _id: string;
+   name: string;
+   email: string;
+   password: string;
+   __v: number;
+   posts: [];
+   favourites: [];
+}
+
+interface CommentsInterface {
+   author: String;
+   text: String;
+   time: Date;
+}
+ 
+interface PostsInterface{
+   _id: string;
+   author: number;
+   title: string;
+   comments?: CommentsInterface[];
+   tags: String[];
+   likes: Number[];
+   image: string;
+}
+
+export const User=({id})=>{
    const classes=useStyles()
    const history=useHistory()
+   const [user, setUser]=useState(undefined)
    const [menuAnchor, setMenuAnchor]=useState(null)
    const [tabValue, setTabValue]=useState(0)
    const [openEdit, setOpenEdit]=useState(false)
-   const [username, setUsername]=useState('User name')
-   const [email, setEmail]=useState('User name')
-   const [password, setPassword]=useState('User name')
-   const [passwordRepeat, setPasswordRepeat]=useState('User name')
-   // const [posts, setPosts]=useState([])
+   const [username, setUsername]=useState('')
+   const [email, setEmail]=useState('')
+   const [password, setPassword]=useState('')
+   const [passwordRepeat, setPasswordRepeat]=useState('')
+   const [posts, setPosts]=useState([])
+   
 
-   // useEffect(() => {
-   //    axios.get('https://calm-escarpment-26540.herokuapp.com/posts').then(response=>{
-   //       console.log(response);
-         
-   //       setPosts(response.data.users)
-   //    }).catch(err=>console.log(err))
-   // })
+   useEffect(() => {
+      axios.get<PostsInterface[]>('https://calm-escarpment-26540.herokuapp.com/posts').then(response=>{         
+         setPosts(response.data)
+      }).catch(err=>console.log(err))
 
-   const handleMenuOpen = event => {
-      setMenuAnchor(event.currentTarget);
-   };
+      axios.get<UserInterface[]>(`https://calm-escarpment-26540.herokuapp.com/users`).then(response=>{         
+         response.data.forEach(_user=>{            
+            _user._id===id && setUser(_user)
+         });
+      }).catch(err=>console.log(err))
+   }, [])
 
-   const handleMenuClose = () => {
-      setMenuAnchor(null);
-   };
+   const handleMenuOpen = event => setMenuAnchor(event.currentTarget)
+
+   const handleMenuClose = () => setMenuAnchor(null)
 
    const handleTabChange=(e, value)=>setTabValue(value)
 
@@ -204,16 +232,42 @@ export const User=()=>{
       setPasswordRepeat(e.currentTarget.value)
       console.log(passwordRepeat);
    }
+
+   const handleSaveEdit=()=>{
+      if(passwordRepeat===password){
+         if(user.name!==username){
+            axios.patch(`https://calm-escarpment-26540.herokuapp.com/users/editName/${id}`, {
+               newName: username
+            }).then(resp=>console.log(resp))
+
+            setUser(prev=>{
+               return {...user, name: username}
+            })
+         }
+
+         if(user.email!==email && email.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)){
+            axios.patch(`https://calm-escarpment-26540.herokuapp.com/users/editEmail/${id}`, {
+               newEmail: email
+            }).then(resp=>console.log(resp))
+
+            setUser(prev=>{
+               return {...user, email: email}
+            })
+         }
+      }
+
+      setOpenEdit(null)
+   }
    
 
    return(
       <>
-         {posts ? 
+         {posts && user ? 
          <>
             <div className={classes.userNav}>
                <Typography 
                   variant='h5' 
-                  className={classes.userName}>{username}</Typography>
+                  className={classes.userName}>{user.name}</Typography>
 
                <div>
                   <IconButton className={classes.navBtn}>
@@ -243,32 +297,38 @@ export const User=()=>{
                               <TextField 
                                  label='username' 
                                  color='secondary'
+                                 defaultValue={user.name}
                                  className={classes.editInput}
                                  onChange={handleUsernameChange}/>
                               <TextField 
                                  label='email' 
                                  color='secondary'
+                                 type="email"
+                                 defaultValue={user.email}
                                  className={classes.editInput}
                                  onChange={handleEmailChange}/>
                               <TextField 
                                  label='password' 
                                  color='secondary'
+                                 type='password'
                                  className={classes.editInput}
                                  onChange={handlePasswordChange}/>
                               <TextField 
                                  label='repeat password' 
                                  color='secondary'
+                                 type='password'
                                  className={classes.editInput}
                                  onChange={handlePasswordRepeatChange}/>
                                  <div className={classes.editBtnContainer}>
-                                    <Button 
-                                       color='secondary'
-                                       className={classes.closeEditBtn}
-                                       onClick={()=>setOpenEdit(null)}>Save</Button>
-                                    <Button 
-                                       color='secondary'
-                                       className={classes.closeEditBtn}
-                                       onClick={()=>setOpenEdit(null)}>Close</Button>
+
+                              <Button 
+                                 color='secondary'
+                                 className={classes.closeEditBtn}
+                                 onClick={()=>setOpenEdit(null)}>Close</Button>
+                              <Button
+                                 color='secondary'
+                                 className={classes.closeEditBtn}
+                                 onClick={handleSaveEdit}>Save</Button>
                                  </div>
                            </div>
                      </Dialog>
@@ -326,3 +386,6 @@ export const User=()=>{
    )
 }
 
+User.defaultProps={
+   id: '60439c14d3018a344c5e6d3d'
+}
