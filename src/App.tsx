@@ -1,7 +1,7 @@
 import React from 'react';
 import {Switch, Route, useHistory} from 'react-router-dom'
 import {Main} from './components/main'
-import {User} from './components/user'
+import {User} from './components/user/user'
 import {Register} from './components/register'
 import {Login} from './components/login'
 import {

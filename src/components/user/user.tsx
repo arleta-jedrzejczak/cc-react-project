@@ -11,13 +11,12 @@ import {
    Grid,
    Menu,
    MenuItem,
-   CircularProgress,
-   Dialog,
-   TextField,
-   Button
+   CircularProgress
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
+import {MenuDialog} from './menuDialog'
+import {NewPostDialog} from './newPostDialog'
 
 // const posts=[
 //    {
@@ -84,6 +83,32 @@ const favourites=[
       likes: 0
    },
 ]
+
+interface UserInterface {
+   _id: string;
+   name: string;
+   email: string;
+   password: string;
+   __v: number;
+   posts: [];
+   favourites: [];
+}
+
+interface CommentsInterface {
+   author: String;
+   text: String;
+   time: Date;
+}
+ 
+interface PostsInterface{
+   _id: string;
+   author: number;
+   title: string;
+   comments?: CommentsInterface[];
+   tags: String[];
+   likes: Number[];
+   image: string;
+}
 
 const useStyles=makeStyles({
    userName:{
@@ -153,31 +178,7 @@ const TabPanel = props => {
    )
 }
 
-interface UserInterface {
-   _id: string;
-   name: string;
-   email: string;
-   password: string;
-   __v: number;
-   posts: [];
-   favourites: [];
-}
 
-interface CommentsInterface {
-   author: String;
-   text: String;
-   time: Date;
-}
- 
-interface PostsInterface{
-   _id: string;
-   author: number;
-   title: string;
-   comments?: CommentsInterface[];
-   tags: String[];
-   likes: Number[];
-   image: string;
-}
 
 export const User=({id})=>{
    const classes=useStyles()
@@ -186,10 +187,7 @@ export const User=({id})=>{
    const [menuAnchor, setMenuAnchor]=useState(null)
    const [tabValue, setTabValue]=useState(0)
    const [openEdit, setOpenEdit]=useState(false)
-   const [username, setUsername]=useState('')
-   const [email, setEmail]=useState('')
-   const [password, setPassword]=useState('')
-   const [passwordRepeat, setPasswordRepeat]=useState('')
+   const [openNewPost, setOpenNewPost]=useState(false)
    const [posts, setPosts]=useState([])
    
 
@@ -211,54 +209,15 @@ export const User=({id})=>{
 
    const handleTabChange=(e, value)=>setTabValue(value)
 
+   const handleAddNewPost=e=>setOpenNewPost(e.currentTarget)
+
+   const editUser=user=>setUser(user)
+
    const handleEditUser=e=>{
       setOpenEdit(e.currentTarget)
       handleMenuClose()
    }
 
-   const handleUsernameChange=e=>{
-      setUsername(e.currentTarget.value)
-      console.log(username);
-   }
-   const handleEmailChange=e=>{
-      setEmail(e.currentTarget.value)
-      console.log(email);
-   }
-   const handlePasswordChange=e=>{
-      setPassword(e.currentTarget.value)
-      console.log(password);
-   }
-   const handlePasswordRepeatChange=e=>{
-      setPasswordRepeat(e.currentTarget.value)
-      console.log(passwordRepeat);
-   }
-
-   const handleSaveEdit=()=>{
-      if(passwordRepeat===password){
-         if(user.name!==username){
-            axios.patch(`https://calm-escarpment-26540.herokuapp.com/users/editName/${id}`, {
-               newName: username
-            }).then(resp=>console.log(resp))
-
-            setUser(prev=>{
-               return {...user, name: username}
-            })
-         }
-
-         if(user.email!==email && email.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)){
-            axios.patch(`https://calm-escarpment-26540.herokuapp.com/users/editEmail/${id}`, {
-               newEmail: email
-            }).then(resp=>console.log(resp))
-
-            setUser(prev=>{
-               return {...user, email: email}
-            })
-         }
-      }
-
-      setOpenEdit(null)
-   }
-   
 
    return(
       <>
@@ -270,14 +229,16 @@ export const User=({id})=>{
                   className={classes.userName}>{user.name}</Typography>
 
                <div>
-                  <IconButton className={classes.navBtn}>
+                  <IconButton 
+                     onClick={handleAddNewPost}
+                     className={classes.navBtn}>
                      <AddIcon className={classes.navIcon}/>
                   </IconButton>
 
-                  <IconButton className={classes.navBtn}>
-                     <MenuIcon 
-                        className={classes.navIcon} 
-                        onClick={handleMenuOpen}/>
+                  <IconButton
+                     onClick={handleMenuOpen} 
+                     className={classes.navBtn}>
+                     <MenuIcon className={classes.navIcon}/>
                   </IconButton>
 
                   <Menu 
@@ -289,49 +250,15 @@ export const User=({id})=>{
                      <MenuItem onClick={handleEditUser}>Edit Account</MenuItem>
                      <MenuItem onClick={()=>history.push('/')}>Logout</MenuItem>
 
-                     <Dialog
-                        id='userEdit'
-                        open={openEdit}
-                        onClose={()=>setOpenEdit(false)}>
-                           <div className={classes.editDialog}>
-                              <TextField 
-                                 label='username' 
-                                 color='secondary'
-                                 defaultValue={user.name}
-                                 className={classes.editInput}
-                                 onChange={handleUsernameChange}/>
-                              <TextField 
-                                 label='email' 
-                                 color='secondary'
-                                 type="email"
-                                 defaultValue={user.email}
-                                 className={classes.editInput}
-                                 onChange={handleEmailChange}/>
-                              <TextField 
-                                 label='password' 
-                                 color='secondary'
-                                 type='password'
-                                 className={classes.editInput}
-                                 onChange={handlePasswordChange}/>
-                              <TextField 
-                                 label='repeat password' 
-                                 color='secondary'
-                                 type='password'
-                                 className={classes.editInput}
-                                 onChange={handlePasswordRepeatChange}/>
-                                 <div className={classes.editBtnContainer}>
+                     <MenuDialog 
+                        open={openEdit} 
+                        user={user}
+                        editUser={editUser}
+                        setOpen={setOpenEdit}/>
 
-                              <Button 
-                                 color='secondary'
-                                 className={classes.closeEditBtn}
-                                 onClick={()=>setOpenEdit(null)}>Close</Button>
-                              <Button
-                                 color='secondary'
-                                 className={classes.closeEditBtn}
-                                 onClick={handleSaveEdit}>Save</Button>
-                                 </div>
-                           </div>
-                     </Dialog>
+                     <NewPostDialog 
+                        open={openNewPost} 
+                        setOpen={setOpenNewPost}/>
                   </Menu>
                </div>
             </div>
