@@ -257,7 +257,8 @@ export const User=({id})=>{
                         setOpen={setOpenEdit}/>
 
                      <NewPostDialog 
-                        open={openNewPost} 
+                        open={openNewPost}
+                        user={user}
                         setOpen={setOpenNewPost}/>
                   </Menu>
                </div>
@@ -307,7 +308,7 @@ export const User=({id})=>{
                   )}
                </Grid>
             </TabPanel>
-         </> : <CircularProgress/>
+         </> : <CircularProgress color='secondary'/>
          }
       </>
    )
