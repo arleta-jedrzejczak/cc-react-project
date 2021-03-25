@@ -102,7 +102,7 @@ interface CommentsInterface {
  
 interface PostsInterface{
    _id: string;
-   author: number;
+   author: string;
    title: string;
    comments?: CommentsInterface[];
    tags: String[];
@@ -170,7 +170,7 @@ const useStyles=makeStyles({
 })
 
 
-const TabPanel = props => {
+const TabPanel = props => {   
    return (
       <div hidden={props.value !== props.index} role="tabpanel">
          {props.children}
@@ -179,13 +179,12 @@ const TabPanel = props => {
 }
 
 
-
 export const User=({id})=>{
    const classes=useStyles()
    const history=useHistory()
-   const [user, setUser]=useState(undefined)
+   const [user, setUser]=useState<UserInterface>(undefined)
    const [menuAnchor, setMenuAnchor]=useState(null)
-   const [tabValue, setTabValue]=useState(0)
+   const [tabValue, setTabValue]=useState<number>(0)
    const [openEdit, setOpenEdit]=useState(false)
    const [openNewPost, setOpenNewPost]=useState(false)
    const [posts, setPosts]=useState([])
@@ -207,7 +206,7 @@ export const User=({id})=>{
 
    const handleMenuClose = () => setMenuAnchor(null)
 
-   const handleTabChange=(e, value)=>setTabValue(value)
+   const handleTabChange=(e, value: number)=>setTabValue(value)
 
    const handleAddNewPost=e=>setOpenNewPost(e.currentTarget)
 
@@ -278,8 +277,8 @@ export const User=({id})=>{
                   container 
                   spacing={1} 
                   className={classes.gridContainer}>
-                  {posts.map(post=>
-                     <Grid item>
+                  {posts.map((post, i)=>
+                     <Grid item key={i}>
                         <div className={classes.imgContainer}>
                            <img 
                               src={post.image} 
@@ -296,8 +295,8 @@ export const User=({id})=>{
                   container 
                   spacing={1} 
                   className={classes.gridContainer}>
-                  {favourites.map(post=>
-                     <Grid item>
+                  {favourites.map((post, i)=>
+                     <Grid item key={i}>
                         <div className={classes.imgContainer}>
                            <img 
                               src={post.image} 
