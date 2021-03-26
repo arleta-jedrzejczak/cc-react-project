@@ -7,7 +7,6 @@ import {
    Button
 } from '@material-ui/core'
 
-
 const useStyles=makeStyles({
    dialogContainer:{
       padding: '10px 30px 20px',
@@ -28,7 +27,7 @@ const useStyles=makeStyles({
 })
 
 
-export const MenuDialog=({open, user, editUser, setOpen})=>{
+export const MenuDialog=({open, user, editUser, setOpen, setAlert})=>{
    const classes=useStyles()
    const [username, setUsername]=useState(user.name)
    const [email, setEmail]=useState(user.email)
@@ -42,7 +41,6 @@ export const MenuDialog=({open, user, editUser, setOpen})=>{
    const handlePasswordChange=e=>setPassword(e.currentTarget.value)
 
    const handlePasswordRepeatChange=e=>setPasswordRepeat(e.currentTarget.value)
-   
 
    const handleSave=()=>{
       if(passwordRepeat===password){
@@ -61,9 +59,10 @@ export const MenuDialog=({open, user, editUser, setOpen})=>{
 
             editUser({...user, email: email})
          }
+         setOpen(null)
       }
-
-      setOpen(null)
+      else         
+         setAlert(true)  
    }
 
    return (

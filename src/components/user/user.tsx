@@ -11,45 +11,14 @@ import {
    Grid,
    Menu,
    MenuItem,
-   CircularProgress
+   CircularProgress,
+   Snackbar
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import AddIcon from '@material-ui/icons/Add'
 import {MenuDialog} from './menuDialog'
 import {NewPostDialog} from './newPostDialog'
-
-// const posts=[
-//    {
-//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-//       tags: ['forest', 'chillout', 'green'],
-//       coments: ['boring comment', 'and another one, slighty longer than the previous'],
-//       likes: 10
-//    },
-//    {
-//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-//       tags: ['forest'],
-//       coments: ['and another one, slighty longer than the previous'],
-//       likes: 12
-//    },
-//    {
-//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-//       tags: ['forest', 'chillout', 'green'],
-//       coments: [],
-//       likes: 10
-//    },
-//    {
-//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-//       tags: ['forest'],
-//       coments: ['and another one, slighty longer than the previous'],
-//       likes: 12
-//    },
-//    {
-//       image: "https://desenio.pl/bilder/artiklar/zoom/11262_2.jpg?imgwidth=435&qt=",
-//       tags: [],
-//       coments: ['boring comment', 'and another one, slighty longer than the previous'],
-//       likes: 0
-//    },
-// ]
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 const favourites=[
    {
@@ -169,15 +138,9 @@ const useStyles=makeStyles({
    }
 })
 
-
-const TabPanel = props => {   
-   return (
-      <div hidden={props.value !== props.index} role="tabpanel">
-         {props.children}
-      </div>
-   )
-}
-
+const Alert=(props: AlertProps)=>{
+   return <MuiAlert elevation={6} variant="filled" {...props} />;
+ }
 
 export const User=({id})=>{
    const classes=useStyles()
@@ -188,7 +151,23 @@ export const User=({id})=>{
    const [openEdit, setOpenEdit]=useState(false)
    const [openNewPost, setOpenNewPost]=useState(false)
    const [posts, setPosts]=useState([])
+   const [passwordsMatchSnackbar, setPasswordsMatchSnackbar]=useState(false)
+
+   const handleCloseSnackbar = (event?: React.SyntheticEvent, reason?: string) => {
+      if(reason === 'clickaway')
+         return;
+  
+      setPasswordsMatchSnackbar(false)
+    };
    
+
+   const TabPanel = props => {       
+      return (
+         <div hidden={props.value !== props.index} role="tabpanel">
+            {props.children}
+         </div>
+      )
+   } 
 
    useEffect(() => {
       axios.get<PostsInterface[]>('https://calm-escarpment-26540.herokuapp.com/posts').then(response=>{         
@@ -253,11 +232,13 @@ export const User=({id})=>{
                         open={openEdit} 
                         user={user}
                         editUser={editUser}
+                        setAlert={setPasswordsMatchSnackbar}
                         setOpen={setOpenEdit}/>
 
                      <NewPostDialog 
                         open={openNewPost}
                         user={user}
+                        setPosts={setPosts}
                         setOpen={setOpenNewPost}/>
                   </Menu>
                </div>
@@ -272,7 +253,7 @@ export const User=({id})=>{
                <Tab label='Favourites' className={classes.tabHeader}/>
             </Tabs>
 
-            <TabPanel index={0} value={tabValue}>
+            <TabPanel value={tabValue} index={0}>
                <Grid 
                   container 
                   spacing={1} 
@@ -290,7 +271,7 @@ export const User=({id})=>{
                </Grid>
             </TabPanel>
                
-            <TabPanel index={1} value={tabValue}>
+            <TabPanel value={tabValue} index={1}>
                <Grid 
                   container 
                   spacing={1} 
@@ -309,6 +290,12 @@ export const User=({id})=>{
             </TabPanel>
          </> : <CircularProgress color='secondary'/>
          }
+
+         <Snackbar open={passwordsMatchSnackbar} autoHideDuration={6000} onClose={()=>setPasswordsMatchSnackbar(false)}>      
+            <Alert onClose={handleCloseSnackbar} severity="warning">
+               Passwords don't match
+            </Alert>
+         </Snackbar>
       </>
    )
 }

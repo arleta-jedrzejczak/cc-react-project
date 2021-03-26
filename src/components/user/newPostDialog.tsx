@@ -53,7 +53,7 @@ const useStyles=makeStyles({
 })
 
 
-export const NewPostDialog=({open, setOpen, user})=>{
+export const NewPostDialog=({open, setOpen, setPosts, user})=>{
    const classes=useStyles()
    const [image, setImage]=useState<string>('')
    const [title, setTitle]=useState<string>('')
@@ -61,16 +61,19 @@ export const NewPostDialog=({open, setOpen, user})=>{
    const [loaded, setLoaded]=useState<boolean>(false)
 
    const handleSave=()=>{
+      let _tags=tags.replace(/  +/g, ' ').trim().split(' ')
+
       if(title && image){         
          axios.post('https://calm-escarpment-26540.herokuapp.com/posts/', {
             image: image,
             title: title,
-            tags: [],
+            tags: _tags,
             author: user._id
-         }).then(resp=>console.log(resp))
+         }).then(resp=>setPosts(prev=>[...prev, resp.data]))
       }
 
       setImage('')
+      setLoaded(false)
       setOpen(false)
    }
 
