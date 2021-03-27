@@ -7,12 +7,18 @@ import {
    Button
 } from '@material-ui/core'
 
-const useStyles=makeStyles({
+const useStyles=makeStyles(theme=>({
+   container:{
+      'max-width': '90%'
+   },
+   paper:{
+      'min-width': '300px',
+      'margin': '0'
+   },
    dialogContainer:{
       padding: '10px 30px 20px',
       display: 'flex',
-      flexDirection: 'column',
-      minWidth: '40vw'
+      flexDirection: 'column'
    },
    closeBtn:{
       margin: '10px 10px 0'
@@ -24,15 +30,25 @@ const useStyles=makeStyles({
       display: 'flex',
       justifyContent: 'space-between'
    }
-})
+}))
 
 
-export const MenuDialog=({open, user, editUser, setOpen, setAlert})=>{
+export const MenuDialog=({open, user, editUser, setOpen, setAlert}:{
+   open: boolean,
+   user: {
+      _id: string,
+      name: string,
+      email: string
+   },
+   setOpen: (val: boolean)=>void,
+   setAlert: (val: boolean)=>void,
+   editUser: (val: {name: string, email: string})=>void
+})=>{
    const classes=useStyles()
-   const [username, setUsername]=useState(user.name)
-   const [email, setEmail]=useState(user.email)
-   const [password, setPassword]=useState('')
-   const [passwordRepeat, setPasswordRepeat]=useState('')
+   const [username, setUsername]=useState<string>(user.name)
+   const [email, setEmail]=useState<string>(user.email)
+   const [password, setPassword]=useState<string>('')
+   const [passwordRepeat, setPasswordRepeat]=useState<string>('')
 
    const handleUsernameChange=e=>setUsername(e.currentTarget.value)
 
@@ -66,10 +82,11 @@ export const MenuDialog=({open, user, editUser, setOpen, setAlert})=>{
    }
 
    return (
-      <div>
+      <div className={classes.container}>
          <Dialog
             id='userEdit'
             open={open}
+            classes={{paperFullWidth: classes.container, paper: classes.paper}}
             onClose={()=>setOpen(false)}>
                <div className={classes.dialogContainer}>
                   <TextField 

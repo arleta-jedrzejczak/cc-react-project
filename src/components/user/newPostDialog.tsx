@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import {useHistory} from 'react-router-dom'
 import axios from 'axios'
 import firebase from 'firebase'
 import {
@@ -11,23 +10,14 @@ import {
    Button
 } from '@material-ui/core'
 
-interface UserInterface {
-   _id: string;
-   name: string;
-   email: string;
-   password: string;
-   __v: number;
-   posts: [];
-   favourites: [];
-}
-
-
-const useStyles=makeStyles({
+const useStyles=makeStyles(theme=>({
+   container:{
+      'max-width': '90%'
+   },
    dialogContainer:{
       padding: '10px 30px 20px',
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '40vw'
    },
    closeBtn:{
       margin: '10px 10px 0'
@@ -40,7 +30,8 @@ const useStyles=makeStyles({
       justifyContent: 'space-between'
    },
    fileInput:{
-      margin: '30px 0'
+      margin: '30px 0',
+      padding: '10px'
    },
    btnContainer:{
       display: 'flex',
@@ -50,15 +41,28 @@ const useStyles=makeStyles({
       maxHeight: '50vh',
       objectFit: 'cover'
    }
-})
+}))
 
-
-export const NewPostDialog=({open, setOpen, setPosts, user})=>{
+export const NewPostDialog=({open, setOpen, setPosts, user}: {
+   open: boolean,
+   setOpen: (val: boolean)=>void,
+   setPosts: (prev?: any)=>void,
+   user:{
+      _id: string
+   }
+})=>{
    const classes=useStyles()
    const [image, setImage]=useState<string>('')
    const [title, setTitle]=useState<string>('')
-   const [tags, setTags]=useState('')
+   const [tags, setTags]=useState<string>('')
    const [loaded, setLoaded]=useState<boolean>(false)
+
+   const handleClose=()=>{
+      setImage('')
+      setTitle('')
+      setTags('')
+      setOpen(false)
+   }
 
    const handleSave=()=>{
       let _tags=tags.replace(/  +/g, ' ').trim().split(' ')
@@ -73,6 +77,8 @@ export const NewPostDialog=({open, setOpen, setPosts, user})=>{
       }
 
       setImage('')
+      setTitle('')
+      setTags('')
       setLoaded(false)
       setOpen(false)
    }
@@ -95,6 +101,7 @@ export const NewPostDialog=({open, setOpen, setPosts, user})=>{
          <Dialog
             id='userEdit'
             open={open}
+            classes={{paperFullWidth: classes.container}}
             onClose={()=>setOpen(false)}>
                <div className={classes.dialogContainer}>
                   <Typography variant='h4'>Add new post</Typography>
@@ -114,7 +121,7 @@ export const NewPostDialog=({open, setOpen, setPosts, user})=>{
                      <Button
                         color='secondary'
                         className={classes.closeBtn}
-                        onClick={()=>setOpen(null)}>Close</Button>
+                        onClick={handleClose}>Close</Button>
                      <Button
                         color='secondary'
                         disabled={!loaded || title.length===0}
