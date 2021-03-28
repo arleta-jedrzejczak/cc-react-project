@@ -14,8 +14,8 @@ interface Props {
    onSubmit: (values: Values) => void;
 }
 
-const validateNick = (value) => {
-  let error;
+const validateNick = (value: string): string => {
+  let error: string;
   if (!value) {
    error = 'Required!';
   }
@@ -25,8 +25,8 @@ const validateNick = (value) => {
   return error;
 }
 
-const validateEmail = (value) => {
-   let error;
+const validateEmail = (value: string): string => {
+   let error: string;
    if (!value) {
      error = 'Required!';
    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
@@ -35,17 +35,20 @@ const validateEmail = (value) => {
    return error;
 }
 
-const validatePassword = (value) => {
-   let error;
+const validatePassword = (value: string): string => {
+   let error: string;
    if (!value) {
      error = 'Required!';
    }
    return error;
 }
 
-const validateRepeatPassword = (pass, value) => {
-   let error = "";
-   if (pass && value) {
+const validateRepeatPassword = (pass: string, value: string): string => {
+   let error: string;
+   if (!value) {
+      error = 'Required!';
+    }
+   else if (pass && value) {
      if (pass !== value) {
        error = 'Password not matched';
      }

@@ -12,18 +12,18 @@ interface Props {
    onSubmit: (values: Values) => void;
 }
 
-const validateEmail = (value) => {
-   let error;
+const validateEmail = (value: string): string => {
+   let error: string;
    if (!value) {
-     error = '';
+     error = 'Required!';
    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
      error = 'Invalid email address';
    }
    return error;
 }
 
-const validatePassword = (value) => {
-   let error;
+const validatePassword = (value: string): string => {
+   let error: string;
    if (!value) {
      error = 'Required!';
    }
