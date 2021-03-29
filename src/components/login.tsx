@@ -49,10 +49,7 @@ export const Login: React.FC<Props> = ({onSubmit}) => {
                      <Field type="password" placeholder='Password' name='password' component={MyField} validate={validatePassword}/>
                      {errors.password && touched.password && <div>{errors.password}</div>} 
                   </div>
-                  <Button variant="contained" type='submit'>Submit</Button> 
-                  <pre>
-                     {JSON.stringify(values, null, 2)}
-                  </pre> 
+                  <Button variant="contained" type='submit'>Submit</Button>  
                </Form>
             </div>
          )}
