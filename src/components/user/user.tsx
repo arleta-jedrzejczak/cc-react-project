@@ -174,21 +174,19 @@ export const User = ({ id }) => {
   };
 
   useEffect(() => {
-    axios
-      .get("https://calm-escarpment-26540.herokuapp.com/posts")
-      .then((response) => {
-        setPosts(response.data);
-      })
-      .catch((err) => console.log(err));
+     axios
+        .get("https://calm-escarpment-26540.herokuapp.com/posts")
+        .then(response => {
+           setPosts(response.data);
+        })
+        .catch(err => console.log(err));
 
-    axios
-      .get(`https://calm-escarpment-26540.herokuapp.com/users`)
-      .then((response) => {
-        response.data.forEach((_user) => {
-          _user._id === id && setUser(_user);
-        });
-      })
-      .catch((err) => console.log(err));
+     axios
+        .get(`https://calm-escarpment-26540.herokuapp.com/users/${id}`)
+        .then(res => {
+           setUser(res.data);
+        })
+        .catch(err => console.log(err));
   }, []);
 
   const handleMenuOpen = (e: React.SyntheticEvent) =>
