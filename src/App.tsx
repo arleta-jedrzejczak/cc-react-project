@@ -4,6 +4,7 @@ import { Main } from "./components/main";
 import { User } from "./components/user/user";
 import { Register } from "./components/register";
 import { Login } from "./components/login";
+import { Post } from "./components/post";
 import { makeStyles, Typography, Button } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -70,6 +71,10 @@ function App() {
 
         <Route exact path="/login">
           <Login />
+        </Route>
+
+        <Route exact path="/post/:postId/:user">
+          <Post />
         </Route>
       </Switch>
     </div>

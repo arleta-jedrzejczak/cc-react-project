@@ -14,6 +14,7 @@ export interface newPostDialogInterface {
   open: boolean;
   setOpen: (val: boolean) => void;
   setPosts: (prev?: any) => void;
+  setUser: (prev?: any) => void;
   user: {
     _id: string;
   };
