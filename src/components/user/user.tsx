@@ -9,8 +9,11 @@ import {
   Avatar,
   IconButton,
   Grid,
+  Input,
   Menu,
   MenuItem,
+  Popover,
+  Button,
   CircularProgress,
   Snackbar,
 } from "@material-ui/core";
@@ -139,6 +142,7 @@ const useStyles = makeStyles((theme) => ({
     top: "48vh",
     left: "calc(50vw - 20px)",
   },
+  //  XXXXXXXXXXXXXXX      STYLE CHANGE AVATAR POPOVER
 }));
 
 const Alert = (props: AlertProps) => {
@@ -154,17 +158,9 @@ export const User = ({ id }) => {
   const [openEdit, setOpenEdit] = useState(null);
   const [openNewPost, setOpenNewPost] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [changeAvatarPopover, setChangeAvatarPopover] = useState(false);
+  const [changeAvatarPopoverAnchor, setChangeAvatarPopoverAnchor] = useState();
   const [passwordsMatchSnackbar, setPasswordsMatchSnackbar] = useState(false);
-  
-
-  const handleCloseSnackbar = (
-    event?: React.SyntheticEvent,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") return;
-
-    setPasswordsMatchSnackbar(false);
-  };
 
   const TabPanel = (props: TabPropsInterface) => {
     return (
@@ -175,14 +171,23 @@ export const User = ({ id }) => {
   };
 
   useEffect(() => {
-     axios
-        .get(`https://damp-ridge-27698.herokuapp.com/users/${id}`)
-        .then(res => {           
-           setUser(res.data);
-           setPosts(res.data.posts)
-        })
-        .catch(err => console.log(err));
+    axios
+      .get(`https://damp-ridge-27698.herokuapp.com/users/${id}`)
+      .then((res) => {
+        setUser(res.data);
+        setPosts(res.data.posts);
+      })
+      .catch((err) => console.log(err));
   }, []);
+
+  const handleCloseSnackbar = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") return;
+
+    setPasswordsMatchSnackbar(false);
+  };
 
   const handleMenuOpen = (e: React.SyntheticEvent) =>
     setMenuAnchor(e.currentTarget);
@@ -199,6 +204,16 @@ export const User = ({ id }) => {
   const handleEditUser = (e: React.SyntheticEvent) => {
     setOpenEdit(e.currentTarget);
     handleMenuClose();
+  };
+
+  const handleAvatarPopover = (e) => {
+    setChangeAvatarPopover(true);
+    setChangeAvatarPopoverAnchor(e.currentTarget);
+    //  XXXXXXXXXXXXXXXXXXX  CREATE PREVIEW OF NEW AVATAR
+  };
+
+  const handleSaveAvatar = (e) => {
+    //  XXXXXXXXXXXXXXXXXXXXXXXXX     SAVE NEW AVATAR TO DATABASE
   };
 
   return (
@@ -254,8 +269,47 @@ export const User = ({ id }) => {
           </div>
 
           <div>
-            <Avatar className={classes.avatar} />
+            <Avatar className={classes.avatar} onClick={handleAvatarPopover} />
           </div>
+
+          <Popover
+            anchorEl={changeAvatarPopoverAnchor}
+            open={changeAvatarPopover}
+            onClose={() => {
+              setChangeAvatarPopoverAnchor(null);
+              setChangeAvatarPopover(false);
+            }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+          >
+            <Typography>Choose your avatar picture</Typography>
+
+            <Input type="file" />
+
+            <div>
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={() => setChangeAvatarPopover(false)}
+              >
+                Canel
+              </Button>
+
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={handleSaveAvatar}
+              >
+                Save
+              </Button>
+            </div>
+          </Popover>
 
           <Tabs onChange={handleTabChange}>
             <Tab
@@ -278,7 +332,7 @@ export const User = ({ id }) => {
                     <img
                       alt="post"
                       src={post.image}
-                      onClick={() => history.replace(`/post/${post.id}/${id}`)}  //change id to id of current user
+                      onClick={() => history.replace(`/post/${post.id}/${id}`)} //change id to id of current user
                       className={classes.postImg}
                     />
                   </div>

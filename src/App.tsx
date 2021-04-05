@@ -4,7 +4,7 @@ import { Main } from "./components/main";
 import { User } from "./components/user/user";
 import { Register } from "./components/register";
 import { Login } from "./components/login";
-import {Post} from "./components/post";
+import { Post } from "./components/post";
 import { makeStyles, Typography, Button } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -73,7 +73,7 @@ function App() {
           <Login />
         </Route>
 
-        <Route exact path="/post/:id/:user">
+        <Route exact path="/post/:postId/:user">
           <Post />
         </Route>
       </Switch>
