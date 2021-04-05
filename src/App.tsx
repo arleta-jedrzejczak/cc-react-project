@@ -73,7 +73,7 @@ function App() {
           <Login />
         </Route>
 
-        <Route exact path="/post/:id">
+        <Route exact path="/post/:id/:user">
           <Post />
         </Route>
       </Switch>

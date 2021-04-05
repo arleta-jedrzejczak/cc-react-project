@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 export const NewPostDialog = ({
   open,
   setOpen,
+  setUser,
   setPosts,
   user,
 }: newPostDialogInterface) => {
@@ -67,14 +68,23 @@ export const NewPostDialog = ({
     let _tags = tags.replace(/  +/g, " ").trim().split(" ");
 
     if (title && image) {
-      axios
-        .post("https://calm-escarpment-26540.herokuapp.com/posts/", {
+      axios.post("https://damp-ridge-27698.herokuapp.com/posts/", {
           image: image,
           title: title,
           tags: _tags,
           author: user._id,
-        })
-        .then((resp) => setPosts((prev) => [...prev, resp.data]));
+        }).then((response) => {
+           setPosts((prev) => [...prev, {id: response.data._id, image: response.data.image}])      
+           
+           axios.patch(`https://damp-ridge-27698.herokuapp.com/users/addPost/${response.data.author}`, {
+              post: {id: response.data._id, image: response.data.image}
+           }).then(resp=>{
+              setUser(prev=>{
+                 const newUser={...prev, posts: [...prev.posts, {id: response.data._id, image: response.data.image}]}
+                 return newUser
+              })
+            }).catch(err=>console.log(err))
+        }).catch(err=>console.log(err))
     }
 
     setImage("");

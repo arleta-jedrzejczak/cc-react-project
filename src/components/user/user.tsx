@@ -21,7 +21,7 @@ import { NewPostDialog } from "./newPostDialog";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import { TabPropsInterface } from "./interfaces";
 
-const favourites = [
+const favorites = [
   {
     image:
       "https://images.photowall.com/products/58341/foggy-forest-4.jpg?h=699&q=85",
@@ -31,7 +31,7 @@ const favourites = [
       "and another one, slighty longer than the previous",
     ],
     likes: 10,
-    _id: "123",
+    id: "123",
   },
   {
     image:
@@ -39,7 +39,7 @@ const favourites = [
     tags: ["forest"],
     coments: ["and another one, slighty longer than the previous"],
     likes: 12,
-    _id: "123",
+    id: "123",
   },
   {
     image:
@@ -47,7 +47,7 @@ const favourites = [
     tags: ["forest", "chillout", "green"],
     coments: [],
     likes: 10,
-    _id: "123",
+    id: "123",
   },
   {
     image:
@@ -55,7 +55,7 @@ const favourites = [
     tags: ["forest"],
     coments: ["and another one, slighty longer than the previous"],
     likes: 12,
-    _id: "123",
+    id: "123",
   },
   {
     image:
@@ -66,7 +66,7 @@ const favourites = [
       "and another one, slighty longer than the previous",
     ],
     likes: 0,
-    _id: "123",
+    id: "123",
   },
 ];
 
@@ -155,6 +155,7 @@ export const User = ({ id }) => {
   const [openNewPost, setOpenNewPost] = useState(null);
   const [posts, setPosts] = useState([]);
   const [passwordsMatchSnackbar, setPasswordsMatchSnackbar] = useState(false);
+  
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent,
@@ -175,16 +176,10 @@ export const User = ({ id }) => {
 
   useEffect(() => {
      axios
-        .get("https://calm-escarpment-26540.herokuapp.com/posts")
-        .then(response => {
-           setPosts(response.data);
-        })
-        .catch(err => console.log(err));
-
-     axios
-        .get(`https://calm-escarpment-26540.herokuapp.com/users/${id}`)
-        .then(res => {
+        .get(`https://damp-ridge-27698.herokuapp.com/users/${id}`)
+        .then(res => {           
            setUser(res.data);
+           setPosts(res.data.posts)
         })
         .catch(err => console.log(err));
   }, []);
@@ -250,6 +245,7 @@ export const User = ({ id }) => {
                 <NewPostDialog
                   open={openNewPost}
                   user={user}
+                  setUser={setUser}
                   setPosts={setPosts}
                   setOpen={setOpenNewPost}
                 />
@@ -268,7 +264,7 @@ export const User = ({ id }) => {
               style={tabValue === 0 ? { color: "#090909" } : { color: "#777" }}
             />
             <Tab
-              label="Favourites"
+              label="favorites"
               className={classes.tabHeader}
               style={tabValue === 1 ? { color: "#090909" } : { color: "#777" }}
             />
@@ -282,7 +278,7 @@ export const User = ({ id }) => {
                     <img
                       alt="post"
                       src={post.image}
-                      onClick={() => history.replace(`/post/${post._id}`)}
+                      onClick={() => history.replace(`/post/${post.id}/${id}`)}  //change id to id of current user
                       className={classes.postImg}
                     />
                   </div>
@@ -293,13 +289,13 @@ export const User = ({ id }) => {
 
           <TabPanel value={tabValue} index={1}>
             <Grid container spacing={1}>
-              {favourites.map((fav, i) => (
+              {favorites.map((fav, i) => (
                 <Grid item key={i} xs={6} sm={4} md={3}>
                   <div className={classes.imgContainer}>
                     <img
                       src={fav.image}
                       alt="post"
-                      onClick={() => history.replace(`/post/${fav._id}`)}
+                      onClick={() => history.replace(`/post/${fav.id}`)}
                       className={classes.postImg}
                     />
                   </div>
@@ -326,5 +322,5 @@ export const User = ({ id }) => {
 };
 
 User.defaultProps = {
-  id: "60439c14d3018a344c5e6d3d",
+  id: "606a0e06d2dade415814a66d",
 };
