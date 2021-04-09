@@ -8,14 +8,14 @@ const useStyles = makeStyles((theme) => ({
     "max-width": "100%",
     "text-align": "center",
     "margin-top": "4rem",
-    "font-family": "Arial, Helvetica, sans-serif"
+    "font-family": "Roboto, Helvetica, Arial, sans-serif",
   },
   input: {
-    "padding": ".5rem"
+    padding: ".5rem",
   },
   button: {
-    "margin": "1.5rem"
-  }
+    margin: "1.5rem",
+  },
 }));
 
 interface Values {
@@ -28,8 +28,6 @@ interface Values {
 interface Props {
   onSubmit: (values: Values) => void;
 }
-
-
 
 const validateNick = (value: string): string => {
   let error: string;
@@ -129,7 +127,11 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
                 <div>{errors.repeatPassword}</div>
               )}
             </div>
-            <Button className={classes.button} variant="contained" type="submit">
+            <Button
+              className={classes.button}
+              variant="contained"
+              type="submit"
+            >
               Submit
             </Button>
           </Form>
