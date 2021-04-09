@@ -1,7 +1,22 @@
 import * as React from "react";
-import { Button } from "@material-ui/core";
+import { makeStyles, Button } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import { MyField } from "./MyField";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    "max-width": "100%",
+    "text-align": "center",
+    "margin-top": "4rem",
+    "font-family": "Arial, Helvetica, sans-serif"
+  },
+  input: {
+    "padding": ".5rem"
+  },
+  button: {
+    "margin": "1.5rem"
+  }
+}));
 
 interface Values {
   nick: string;
@@ -13,6 +28,8 @@ interface Values {
 interface Props {
   onSubmit: (values: Values) => void;
 }
+
+
 
 const validateNick = (value: string): string => {
   let error: string;
@@ -55,6 +72,7 @@ const validateRepeatPassword = (pass: string, value: string): string => {
 };
 
 export const Register: React.FC<Props> = ({ onSubmit }) => {
+  const classes = useStyles();
   return (
     <Formik
       validateOnChange={true}
@@ -64,9 +82,9 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
       }}
     >
       {({ errors, touched, values }) => (
-        <div style={{ textAlign: "center" }}>
+        <div className={classes.container}>
           <Form>
-            <div>
+            <div className={classes.input}>
               <Field
                 placeholder="Nick"
                 name="nick"
@@ -75,7 +93,7 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
               />
               {errors.nick && touched.nick && <div>{errors.nick}</div>}
             </div>
-            <div>
+            <div className={classes.input}>
               <Field
                 type="email"
                 placeholder="Email"
@@ -85,7 +103,7 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
               />
               {errors.email && touched.email && <div>{errors.email}</div>}
             </div>
-            <div>
+            <div className={classes.input}>
               <Field
                 type="password"
                 placeholder="Password"
@@ -97,7 +115,7 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
                 <div>{errors.password}</div>
               )}
             </div>
-            <div>
+            <div className={classes.input}>
               <Field
                 type="password"
                 placeholder="Repeat password"
@@ -111,7 +129,7 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
                 <div>{errors.repeatPassword}</div>
               )}
             </div>
-            <Button variant="contained" type="submit">
+            <Button className={classes.button} variant="contained" type="submit">
               Submit
             </Button>
           </Form>

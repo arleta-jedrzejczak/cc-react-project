@@ -1,7 +1,22 @@
 import * as React from 'react';
-import {Button} from '@material-ui/core';
+import { makeStyles, Button } from "@material-ui/core";
 import {Formik, Form, Field} from 'formik';
 import { MyField } from './MyField';
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    "max-width": "100%",
+    "text-align": "center",
+    "margin-top": "4rem",
+    "font-family": "Arial, Helvetica, sans-serif",
+  },
+  input: {
+    padding: ".5rem",
+  },
+  button: {
+    margin: "1.5rem",
+  },
+}));
 
 interface Values {
    email: string;
@@ -31,28 +46,45 @@ const validatePassword = (value: string): string => {
 }
 
 export const Login: React.FC<Props> = ({onSubmit}) => {
+   const classes = useStyles();
    return (
-      <Formik 
-         initialValues={{email: '', password: ''}} 
-         onSubmit={(values) => {
-            onSubmit(values);
-         }}
-      >
-         {({errors, touched, values}) => (
-            <div style={{textAlign: 'center'}}>
-               <Form>
-                  <div>
-                     <Field type='email' placeholder='Email' name='email'  component={MyField} validate={validateEmail}/> 
-                     {errors.email && touched.email && <div>{errors.email}</div>} 
-                  </div>
-                  <div>
-                     <Field type="password" placeholder='Password' name='password' component={MyField} validate={validatePassword}/>
-                     {errors.password && touched.password && <div>{errors.password}</div>} 
-                  </div>
-                  <Button variant="contained" type='submit'>Submit</Button>  
-               </Form>
-            </div>
-         )}
-      </Formik>
+     <Formik
+       initialValues={{ email: "", password: "" }}
+       onSubmit={(values) => {
+         onSubmit(values);
+       }}
+     >
+       {({ errors, touched, values }) => (
+         <div className={classes.container}>
+           <Form>
+             <div className={classes.input}>
+               <Field
+                 type="email"
+                 placeholder="Email"
+                 name="email"
+                 component={MyField}
+                 validate={validateEmail}
+               />
+               {errors.email && touched.email && <div>{errors.email}</div>}
+             </div>
+             <div className={classes.input}>
+               <Field
+                 type="password"
+                 placeholder="Password"
+                 name="password"
+                 component={MyField}
+                 validate={validatePassword}
+               />
+               {errors.password && touched.password && (
+                 <div>{errors.password}</div>
+               )}
+             </div>
+             <Button className={classes.button} variant="contained" type="submit">
+               Submit
+             </Button>
+           </Form>
+         </div>
+       )}
+     </Formik>
    );
 };
