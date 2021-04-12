@@ -76,13 +76,9 @@ const handleSubmit = (values) => {
     email: values.email,
     password: values.password
   }
-  console.log(user);
   axios
     .post("https://damp-ridge-27698.herokuapp.com/users/register", user)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((err) => console.log(err));
+    .catch((err) => err.message);
 }
 
 export const Register: React.FC = () => {

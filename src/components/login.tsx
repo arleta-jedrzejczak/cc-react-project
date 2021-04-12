@@ -42,14 +42,22 @@ const validatePassword = (value: string): string => {
   return error;
 };
 
+const handleLogin = (values) => {
+  const user={
+    name: values.nick,
+    password: values.password
+  }
+  axios
+    .post("https://damp-ridge-27698.herokuapp.com/")
+    .catch((err) => err.message);
+}
+
 export const Login: React.FC = () => {
   const classes = useStyles();
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      onSubmit={(values) => {
-
-      }}
+      onSubmit={handleLogin}
     >
       {({ errors, touched, values }) => (
         <div className={classes.container}>
