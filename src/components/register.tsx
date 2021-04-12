@@ -2,8 +2,13 @@ import * as React from "react";
 import { makeStyles, Button } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import { MyField } from "./MyField";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
+  title: {
+    "font-weight": "bold",
+    "font-size": "1.8rem"
+  },
   container: {
     "max-width": "100%",
     "text-align": "center",
@@ -76,11 +81,23 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
       validateOnChange={true}
       initialValues={{ nick: "", email: "", password: "", repeatPassword: "" }}
       onSubmit={(values) => {
-        onSubmit(values);
+        const user={
+          name: values.nick,
+          email: values.email,
+          password: values.password
+        }
+        console.log(user);
+        axios
+          .post("https://calm-escarpment-26540.herokuapp.com/users/register", user)
+          .then((response) => {
+            console.log(response.data)
+          })
+          .catch((err) => console.log(err));
       }}
     >
       {({ errors, touched, values }) => (
         <div className={classes.container}>
+          <div className={classes.title}>Create an account</div>
           <Form>
             <div className={classes.input}>
               <Field

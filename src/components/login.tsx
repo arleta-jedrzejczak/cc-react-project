@@ -84,7 +84,7 @@ export const Login: React.FC<Props> = ({ onSubmit }) => {
               variant="contained"
               type="submit"
             >
-              Submit
+              Login
             </Button>
           </Form>
         </div>
