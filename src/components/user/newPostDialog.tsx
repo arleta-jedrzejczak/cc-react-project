@@ -68,7 +68,7 @@ export const NewPostDialog = ({
 
     if (title && image) {
       axios
-        .post("https://calm-escarpment-26540.herokuapp.com/posts/", {
+        .post("https://damp-ridge-27698.herokuapp.com/posts/", {
           image: image,
           title: title,
           tags: _tags,

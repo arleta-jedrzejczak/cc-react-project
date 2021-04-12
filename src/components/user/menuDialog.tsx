@@ -55,7 +55,7 @@ export const MenuDialog = ({
       if (user.name !== username && username !== "") {
         axios
           .patch(
-            `https://calm-escarpment-26540.herokuapp.com/users/editName/${user._id}`,
+            `https://damp-ridge-27698.herokuapp.com/users/editName/${user._id}`,
             {
               newName: username,
             }
@@ -71,7 +71,7 @@ export const MenuDialog = ({
       ) {
         axios
           .patch(
-            `https://calm-escarpment-26540.herokuapp.com/users/editEmail/${user._id}`,
+            `https://damp-ridge-27698.herokuapp.com/users/editEmail/${user._id}`,
             {
               newEmail: email,
             }

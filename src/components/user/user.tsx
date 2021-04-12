@@ -175,14 +175,14 @@ export const User = ({ id }) => {
 
   useEffect(() => {
     axios
-      .get("https://calm-escarpment-26540.herokuapp.com/posts")
+      .get("https://damp-ridge-27698.herokuapp.com/posts")
       .then((response) => {
         setPosts(response.data);
       })
       .catch((err) => console.log(err));
 
     axios
-      .get(`https://calm-escarpment-26540.herokuapp.com/users`)
+      .get(`https://damp-ridge-27698.herokuapp.com/users`)
       .then((response) => {
         response.data.forEach((_user) => {
           _user._id === id && setUser(_user);
