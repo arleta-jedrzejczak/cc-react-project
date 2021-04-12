@@ -88,9 +88,9 @@ export const Register: React.FC<Props> = ({ onSubmit }) => {
         }
         console.log(user);
         axios
-          .post("https://calm-escarpment-26540.herokuapp.com/users/register", user)
+          .post("https://damp-ridge-27698.herokuapp.com/users/register", user)
           .then((response) => {
-            console.log(response.data)
+            console.log(response.data);
           })
           .catch((err) => console.log(err));
       }}
