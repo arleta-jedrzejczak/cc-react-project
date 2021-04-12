@@ -66,19 +66,11 @@ function App() {
         </Route>
 
         <Route exact path="/register">
-          <Register
-            onSubmit={(values) => {
-              console.log(values);
-            }}
-          />
+          <Register />
         </Route>
 
         <Route exact path="/login">
-          <Login
-            onSubmit={(values) => {
-              console.log(values);
-            }}
-          />
+          <Login />
         </Route>
 
         <Route exact path="/post/:postId/:user">

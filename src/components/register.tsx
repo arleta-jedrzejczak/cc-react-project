@@ -30,10 +30,6 @@ interface Values {
   repeatPassword: string;
 }
 
-interface Props {
-  onSubmit: (values: Values) => void;
-}
-
 const validateNick = (value: string): string => {
   let error: string;
   if (!value) {
@@ -74,26 +70,28 @@ const validateRepeatPassword = (pass: string, value: string): string => {
   return error;
 };
 
-export const Register: React.FC<Props> = ({ onSubmit }) => {
+const handleSubmit = (values) => {
+  const user={
+    name: values.nick,
+    email: values.email,
+    password: values.password
+  }
+  console.log(user);
+  axios
+    .post("https://damp-ridge-27698.herokuapp.com/users/register", user)
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((err) => console.log(err));
+}
+
+export const Register: React.FC = () => {
   const classes = useStyles();
   return (
     <Formik
       validateOnChange={true}
       initialValues={{ nick: "", email: "", password: "", repeatPassword: "" }}
-      onSubmit={(values) => {
-        const user={
-          name: values.nick,
-          email: values.email,
-          password: values.password
-        }
-        console.log(user);
-        axios
-          .post("https://damp-ridge-27698.herokuapp.com/users/register", user)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((err) => console.log(err));
-      }}
+      onSubmit={handleSubmit}
     >
       {({ errors, touched, values }) => (
         <div className={classes.container}>

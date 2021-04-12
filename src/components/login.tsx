@@ -24,10 +24,6 @@ interface Values {
   password: string;
 }
 
-interface Props {
-  onSubmit: (values: Values) => void;
-}
-
 const validateEmail = (value: string): string => {
   let error: string;
   if (!value) {
@@ -46,13 +42,13 @@ const validatePassword = (value: string): string => {
   return error;
 };
 
-export const Login: React.FC<Props> = ({ onSubmit }) => {
+export const Login: React.FC = () => {
   const classes = useStyles();
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       onSubmit={(values) => {
-        onSubmit(values);
+
       }}
     >
       {({ errors, touched, values }) => (
