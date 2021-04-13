@@ -1,4 +1,5 @@
 import * as React from "react";
+import { withRouter } from "react-router-dom";
 import { makeStyles, Button } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import { MyField } from "./MyField";
@@ -7,7 +8,7 @@ import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   title: {
     "font-weight": "bold",
-    "font-size": "1.8rem"
+    "font-size": "1.8rem",
   },
   container: {
     "max-width": "100%",
@@ -27,7 +28,6 @@ interface Values {
   nick: string;
   email: string;
   password: string;
-  repeatPassword: string;
 }
 
 const validateNick = (value: string): string => {
@@ -70,24 +70,34 @@ const validateRepeatPassword = (pass: string, value: string): string => {
   return error;
 };
 
-const handleSubmit = (values) => {
-  const user={
+const handleSubmit = (values: Values, history) => {
+  const user = {
     name: values.nick,
     email: values.email,
-    password: values.password
-  }
+    password: values.password,
+  };
   axios
     .post("https://damp-ridge-27698.herokuapp.com/users/register", user)
-    .catch((err) => err.message);
-}
+    .then((response) => {
+      if (response.status === 200) {
+        history.push("/main");
+      }
+    })
+    .catch(function (error) {
+      if (error.response.status === 409) {
+        const m: string = error.response.data.message;
+        const s: string = error.response.status;
+      }
+    });
+};
 
-export const Register: React.FC = () => {
+export const Register = withRouter(({ history }) => {
   const classes = useStyles();
   return (
     <Formik
       validateOnChange={true}
       initialValues={{ nick: "", email: "", password: "", repeatPassword: "" }}
-      onSubmit={handleSubmit}
+      onSubmit={(value) => handleSubmit(value, history)}
     >
       {({ errors, touched, values }) => (
         <div className={classes.container}>
@@ -150,4 +160,4 @@ export const Register: React.FC = () => {
       )}
     </Formik>
   );
-};
+});
