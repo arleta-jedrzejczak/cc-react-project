@@ -1,5 +1,6 @@
 import * as React from "react";
 import { makeStyles, Button } from "@material-ui/core";
+import { withRouter } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import { MyField } from "./MyField";
 import axios from "axios";
@@ -42,22 +43,33 @@ const validatePassword = (value: string): string => {
   return error;
 };
 
-const handleLogin = (values) => {
-  const user={
-    name: values.nick,
-    password: values.password
-  }
+const handleLogin = (values: Values, history) => {
+  const user = {
+    email: values.email,
+    password: values.password,
+  };
   axios
-    .post("https://damp-ridge-27698.herokuapp.com/")
-    .catch((err) => err.message);
-}
+    .post("https://damp-ridge-27698.herokuapp.com/users/login", user)
+    .then((response) => {
+      if (response.status === 200) {
+        history.push("/main");
+      }
+    })
+    .catch(function (error) {
+      if (error.response.status === 409) {
+        const m: string = error.response.data.message;
+        const s: string = error.response.status;
+      }
+    });
+};
 
-export const Login: React.FC = () => {
+export const Login = withRouter(({ history }) => {
   const classes = useStyles();
   return (
     <Formik
+      validateOnChange={true}
       initialValues={{ email: "", password: "" }}
-      onSubmit={handleLogin}
+      onSubmit={(values) => handleLogin(values, history)}
     >
       {({ errors, touched, values }) => (
         <div className={classes.container}>
@@ -96,4 +108,4 @@ export const Login: React.FC = () => {
       )}
     </Formik>
   );
-};
+});
