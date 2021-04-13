@@ -1,5 +1,6 @@
 import * as React from "react";
-import { makeStyles, Button } from "@material-ui/core";
+import { withRouter } from 'react-router-dom';
+import { Snackbar, makeStyles, Button } from "@material-ui/core";
 import { Formik, Form, Field } from "formik";
 import { MyField } from "./MyField";
 import axios from "axios";
@@ -70,7 +71,7 @@ const validateRepeatPassword = (pass: string, value: string): string => {
   return error;
 };
 
-const handleSubmit = (values) => {
+const handleSubmit = (values, history) => {
   const user={
     name: values.nick,
     email: values.email,
@@ -78,16 +79,27 @@ const handleSubmit = (values) => {
   }
   axios
     .post("https://damp-ridge-27698.herokuapp.com/users/register", user)
-    .catch((err) => err.message);
+    .then((response) => {
+      if(response.status===200){
+        history.push('/main');
+      }
+    })
+    .catch(function (error) {
+    if (error.response.status===409) {
+      const m=error.response.data.message;
+      const s=error.response.status;
+    }
+    })
+    
 }
 
-export const Register: React.FC = () => {
+export const Register = withRouter(({ history }) => {
   const classes = useStyles();
   return (
     <Formik
       validateOnChange={true}
       initialValues={{ nick: "", email: "", password: "", repeatPassword: "" }}
-      onSubmit={handleSubmit}
+      onSubmit={(value) => handleSubmit(value, history)}
     >
       {({ errors, touched, values }) => (
         <div className={classes.container}>
@@ -150,4 +162,4 @@ export const Register: React.FC = () => {
       )}
     </Formik>
   );
-};
+});
