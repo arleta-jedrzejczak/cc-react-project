@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { createStyles, fade, Theme, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
-import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Input } from '@material-ui/core';
 import { TopBar } from './main/topBar';
@@ -93,6 +92,7 @@ export const Main = () => {
             setPosts(res.data);
           })
           .catch((err) => console.log(err));
+          //sessionStorage.setItem('id','606a0e06d2dade415814a66d');
       }, []);
 
 
@@ -103,6 +103,7 @@ export const Main = () => {
     <PostGrid
       postsState={posts}
     ></PostGrid>
+    
   </Typography>
   )
 };

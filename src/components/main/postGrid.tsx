@@ -17,7 +17,8 @@ const useStyles = makeStyles({
     zdj: {
         width: '32vw',
         height: '33vh',
-        margin: '0.5vh 0.5vw'
+        margin: '0.5vh 0.5vw',
+        cursor: 'pointer'
     }
   });
 
