@@ -176,11 +176,10 @@ export const User = ({ id }) => {
       .then((res) => {
         setUser(res.data);
         setPosts(res.data.posts);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
-
-  console.log(posts);
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent,
@@ -377,6 +376,6 @@ export const User = ({ id }) => {
   );
 };
 
- User.defaultProps = {
-   id: "606a0e06d2dade415814a66d",
+User.defaultProps = {
+  id: "606a0e06d2dade415814a66d",
 };
