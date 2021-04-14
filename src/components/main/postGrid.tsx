@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import axios from "axios";
-import { createStyles, fade, Theme, makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 import { postsInterface } from './interfaces'
 
