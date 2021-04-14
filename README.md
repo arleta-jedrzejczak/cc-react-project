@@ -70,7 +70,7 @@ axios
     ]);
 }
 
-3. Firebase
+3  Firebase
 firebase
     .storage()
     .ref(img.name)
@@ -88,7 +88,7 @@ firebase
                 setLoaded(true);
     })
 
-4.  Material UI - TextField
+4  Material UI - TextField
 <TextField
     label="username"
     color="secondary"
@@ -97,7 +97,7 @@ firebase
     onChange={handleUsernameChange}
 />
 
-5. TypeScript - Interface 
+5  TypeScript - Interface 
 export interface menuDialogInterface {
   open: boolean;
   user: {
@@ -110,7 +110,7 @@ export interface menuDialogInterface {
   editUser: (val: { name: string; email: string }) => void;
 }
 
-6. Manterial UI/Formik - Validation 
+6  Manterial UI/Formik - Validation 
 const validateEmail = (value: string): string => {
   let error: string;
   if (!value) {
