@@ -172,7 +172,7 @@ export const User = ({ id }) => {
 
   useEffect(() => {
     axios
-      .get(`https://damp-ridge-27698.herokuapp.com/users/606a0e06d2dade415814a66d`)
+      .get(`https://damp-ridge-27698.herokuapp.com/users/${id}`)
       .then((res) => {
         setUser(res.data);
         setPosts(res.data.posts);
