@@ -10,6 +10,8 @@ export const IsLogedMenu = () =>{
 
     const history = useHistory();
     
+    console.log(sessionStorage.getItem('id'))
+
         function isLogged(){
             if(!sessionStorage.getItem('id')){
               return <div>
@@ -17,10 +19,11 @@ export const IsLogedMenu = () =>{
                 <Button color="inherit" onClick={() => history.replace(`/register`)}>Rejestracja</Button>
               </div>
             }else{
-            //    return <IconButton onClick={() => history.replace(`/user/
-            //    ${sessionStorage.getItem('id')}`
-            //    )}
-            return <IconButton onClick={() => history.replace(`/user`)} color="inherit">
+               let id = sessionStorage.getItem('id')
+                return <IconButton onClick={() => history.replace(`/user/
+                ${id}`
+                )}
+             color="inherit">
               <AccountCircle />
             </IconButton>
             }

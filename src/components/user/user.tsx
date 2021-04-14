@@ -377,6 +377,6 @@ export const User = ({ id }) => {
   );
 };
 
-User.defaultProps = {
-  id: "606a0e06d2dade415814a66d",
+ User.defaultProps = {
+   id: "606a0e06d2dade415814a66d",
 };

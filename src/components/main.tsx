@@ -92,7 +92,7 @@ export const Main = () => {
             setPosts(res.data);
           })
           .catch((err) => console.log(err));
-          //sessionStorage.setItem('id','606a0e06d2dade415814a66d');
+           sessionStorage.setItem('id','606a0e06d2dade415814a66d');
       }, []);
 
 
