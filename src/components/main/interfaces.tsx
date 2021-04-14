@@ -1,4 +1,3 @@
-
-export interface postsInterface{
-    postsState: any[];
+export interface postsInterface {
+  postsState: any[];
 }
