@@ -176,7 +176,6 @@ export const User = ({ id }) => {
       .then((res) => {
         setUser(res.data);
         setPosts(res.data.posts);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
