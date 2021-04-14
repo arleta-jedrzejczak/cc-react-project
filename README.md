@@ -45,7 +45,7 @@ https://github.com/arleta-jedrzejczak/CC-node-project
 ## Examples of the implementation:
 
 1.  Snackbar
-
+```
 <Snackbar
     open={passwordsMatchSnackbar}
     autoHideDuration={6000}
@@ -55,9 +55,9 @@ https://github.com/arleta-jedrzejczak/CC-node-project
         Passwords don't match
     </Alert>
 </Snackbar>
-
+```
 2.  Axios
-
+```
 axios
     .post("https://damp-ridge-27698.herokuapp.com/posts/", {
         image: image,
@@ -71,9 +71,9 @@ axios
     { id: response.data._id, image: response.data.image }
     ]);
 }
-
+```
 3.  Firebase
-
+```
 firebase
     .storage()
     .ref(img.name)
@@ -90,9 +90,9 @@ firebase
                 setImage(_url);
                 setLoaded(true);
     })
-
+```
 4.  Material UI - TextField
-
+```
 <TextField
     label="username"
     color="secondary"
@@ -100,9 +100,9 @@ firebase
     className={classes.input}
     onChange={handleUsernameChange}
 />
-
+```
 5.  TypeScript - Interface 
-
+```
 export interface menuDialogInterface {
   open: boolean;
   user: {
@@ -114,9 +114,9 @@ export interface menuDialogInterface {
   setAlert: (val: boolean) => void;
   editUser: (val: { name: string; email: string }) => void;
 }
-
+```
 6.  Manterial UI/Formik - Validation 
-
+```
 const validateEmail = (value: string): string => {
   let error: string;
   if (!value) {
@@ -126,3 +126,4 @@ const validateEmail = (value: string): string => {
   }
   return error;
 };
+```
