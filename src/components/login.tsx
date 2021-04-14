@@ -13,10 +13,10 @@ const useStyles = makeStyles((theme) => ({
     "font-family": "Roboto, Helvetica, Arial, sans-serif",
   },
   input: {
-    "padding": ".5rem",
+    padding: ".5rem",
   },
   button: {
-    "margin": "1.5rem",
+    margin: "1.5rem",
   },
 }));
 
@@ -52,7 +52,7 @@ const handleLogin = (values: Values, history) => {
     .post("https://damp-ridge-27698.herokuapp.com/users/login", user)
     .then((response) => {
       if (response.status === 200) {
-        sessionStorage.setItem('id', response.data._id);
+        sessionStorage.setItem("id", response.data._id);
         history.push("/main");
       }
     })

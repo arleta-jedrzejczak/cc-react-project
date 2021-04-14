@@ -65,6 +65,10 @@ function App() {
           <User />
         </Route>
 
+        <Route exact path="/user/:id">
+          <User id={sessionStorage.getItem("id")}></User>
+        </Route>
+
         <Route exact path="/register">
           <Register />
         </Route>

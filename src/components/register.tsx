@@ -87,7 +87,7 @@ const handleSubmit = (values: Values, history) => {
       if (error) {
         const m: string = error.response.data.message;
         const s: string = error.response.status;
-        alert(` Status: ${s} - ${m} `)
+        alert(` Status: ${s} - ${m} `);
       }
     });
 };

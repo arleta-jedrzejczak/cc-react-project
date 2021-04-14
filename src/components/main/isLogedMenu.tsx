@@ -22,10 +22,7 @@ export const IsLogedMenu = () => {
     } else {
       let id = sessionStorage.getItem("id");
       return (
-        <IconButton
-          onClick={() => history.replace(`/user/${id}`)}
-          color="inherit"
-        >
+        <IconButton onClick={() => history.push(`/user/${id}`)} color="inherit">
           <AccountCircle />
         </IconButton>
       );
