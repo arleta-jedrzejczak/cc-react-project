@@ -52,6 +52,7 @@ const handleLogin = (values: Values, history) => {
     .post("https://damp-ridge-27698.herokuapp.com/users/login", user)
     .then((response) => {
       if (response.status === 200) {
+        sessionStorage.setItem('id', response.data._id);
         history.push("/main");
       }
     })
