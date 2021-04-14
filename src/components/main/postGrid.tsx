@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import { createStyles, fade, Theme, makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
+import { postsInterface } from './interfaces'
+
 
 const useStyles = makeStyles({
     kupka: {
@@ -19,28 +22,19 @@ const useStyles = makeStyles({
   });
 
 
-export const PostGrid = () => {
+export const PostGrid = ({postsState = []}:postsInterface) => {
 
+  
     const classes = useStyles();
-
-    const [posts, setPosts] = useState(null);
-
-    useEffect(() => {
-        axios
-          .get(`https://damp-ridge-27698.herokuapp.com/posts`)
-          .then((res) => {
-            setPosts(res.data);
-          })
-          .catch((err) => console.log(err));
-      }, []);
+    const history = useHistory();
 
       function renderPosts(){
-        return posts.map((post) => {
-            return <img className={classes.zdj} src={post.image} />
+        return postsState.map((post) => {
+            return <img onClick={() => history.replace(`/post/${post._id}/${post.author}`)} className={classes.zdj} src={post.image} />
         })
       }
 
     return (
-        <div className={classes.kupka}>{posts === null ? null : renderPosts()}</div>
+      <div className={classes.kupka}>{postsState === null ? null : renderPosts()}</div>
     );
 }
