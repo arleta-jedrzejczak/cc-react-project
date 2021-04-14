@@ -171,14 +171,17 @@ export const User = ({ id }) => {
   };
 
   useEffect(() => {
+    if(id === null || id === undefined){
+      return;
+    }
     axios
-      .get(`https://damp-ridge-27698.herokuapp.com/users/${id}`)
+      .get(`https://damp-ridge-27698.herokuapp.com/users/${sessionStorage.getItem("id")}`)
       .then((res) => {
         setUser(res.data);
         setPosts(res.data.posts);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [sessionStorage.getItem("id")]);
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent,

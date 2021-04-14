@@ -21,40 +21,7 @@ function App() {
     <div className="App">
       <Switch>
         <Route exact path="/">
-          <Typography>Hello from App</Typography>
-
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={classes.buttons}
-            onClick={() => history.push("/main")}
-          >
-            Main
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={classes.buttons}
-            onClick={() => history.push("/user")}
-          >
-            User
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={classes.buttons}
-            onClick={() => history.push("/register")}
-          >
-            Register
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={classes.buttons}
-            onClick={() => history.push("/login")}
-          >
-            Login
-          </Button>
+          <Main />
         </Route>
 
         <Route exact path="/main">
@@ -66,7 +33,7 @@ function App() {
         </Route>
 
         <Route exact path="/user/:id">
-          <User id={sessionStorage.getItem("id")}></User>
+          <User id={sessionStorage.getItem("id") === null || undefined ? '606a0e06d2dade415814a66d': sessionStorage.getItem("id")}></User>
         </Route>
 
         <Route exact path="/register">
