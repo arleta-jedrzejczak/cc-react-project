@@ -84,9 +84,10 @@ const handleSubmit = (values: Values, history) => {
       }
     })
     .catch(function (error) {
-      if (error.response.status === 409) {
+      if (error) {
         const m: string = error.response.data.message;
         const s: string = error.response.status;
+        alert(` Status: ${s} - ${m} `)
       }
     });
 };

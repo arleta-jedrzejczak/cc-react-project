@@ -13,10 +13,10 @@ const useStyles = makeStyles((theme) => ({
     "font-family": "Roboto, Helvetica, Arial, sans-serif",
   },
   input: {
-    padding: ".5rem",
+    "padding": ".5rem",
   },
   button: {
-    margin: "1.5rem",
+    "margin": "1.5rem",
   },
 }));
 
